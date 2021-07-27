@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 #[feature(mlx5)]
-
 mod bindings;
 use std::os::raw::{c_char, c_int};
 
@@ -40,19 +39,21 @@ extern "C" {
     fn rte_pmd_mlx5_get_dyn_flag_names();
 }
 
-#[cfg(feature = "mlx5")]
 #[inline(never)]
 pub fn load_mlx_driver() {
-    if std::env::var("DONT_SET_THIS").is_ok() {
-        unsafe {
-            rte_pmd_mlx5_get_dyn_flag_names();
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "mlx4")] {
+            // Call mlx4 function.
+        } else if #[cfg(feature = "mlx5")] {
+            if std::env::var("DONT_SET_THIS").is_ok() {
+                unsafe {
+                    rte_pmd_mlx5_get_dyn_flag_names();
+                }
+            }
+        } else {
+            compile_error!("Please select a Mellanox version.")
         }
     }
-}
-
-#[cfg(feature = "mlx4")]
-#[inline(never)]
-pub fn load_mlx_driver() {
 }
 
 #[inline]
