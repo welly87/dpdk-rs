@@ -57,10 +57,13 @@ fn main() {
     }
 
     // Step 1: Now that we've compiled and installed DPDK, point cargo to the libraries.
-    println!(
-        "cargo:rustc-link-search=native={}",
-        library_location.unwrap()
-    );
+    if let Some(location) = library_location {
+       println!(
+	"cargo:rustc-link-search=native={}",
+        location
+       );
+    }
+
     for lib_name in &lib_names {
         println!("cargo:rustc-link-lib=dylib={}", lib_name);
     }
