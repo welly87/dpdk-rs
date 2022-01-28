@@ -1,7 +1,7 @@
 Rust Bindings for DPDK
 =======================
 
-[![Join us on Slack!](https://img.shields.io/badge/chat-on%20Slack-e01563.svg)](https://join.slack.com/t/demikernel/shared_invite/zt-t25ffjf9-2k7Y_594T8xn1GBWVYlQ2g)
+[![Join us on Slack!](https://img.shields.io/badge/chat-on%20Slack-e01563.svg)](https://join.slack.com/t/demikernel/shared_invite/zt-11i6lgaw5-HFE_IAls7gUX3kp1XSab0g)
 
 This crate provides Rust bindings for [DPDK](https://www.dpdk.org/). The
 following devices are supported:
