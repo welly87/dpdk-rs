@@ -1,12 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-use dpdk_rs::rte_eal_init;
-use dpdk_rs::*;
-use std::env;
-use std::ffi::CString;
-use std::mem::MaybeUninit;
-use std::time::Duration;
+#![cfg_attr(feature = "strict", deny(clippy:all))]
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(unused)]
+#![allow(unaligned_references)]
+
+use dpdk_rs::{
+    rte_eal_init,
+    *,
+};
+use std::{
+    env,
+    ffi::CString,
+    mem::MaybeUninit,
+    time::Duration,
+};
 
 fn main() {
     load_mlx_driver();
@@ -100,14 +111,7 @@ unsafe fn initialize_dpdk_port(port_id: u16, mbuf_pool: *mut rte_mempool) {
 
     {
         for i in 0..rx_rings {
-            let ret = rte_eth_rx_queue_setup(
-                port_id,
-                i,
-                nb_rxd,
-                socket_id,
-                &rx_conf as *const _,
-                mbuf_pool,
-            );
+            let ret = rte_eth_rx_queue_setup(port_id, i, nb_rxd, socket_id, &rx_conf as *const _, mbuf_pool);
             assert_eq!(ret, 0);
         }
         for i in 0..tx_rings {
