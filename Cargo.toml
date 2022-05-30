@@ -22,3 +22,14 @@ cc = "1.0.73"
 [features]
 mlx4 = []
 mlx5 = []
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+incremental = false
+rpath = false
