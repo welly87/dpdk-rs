@@ -3,7 +3,7 @@
 
 [package]
 name = "dpdk-rs"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2018"
 
 [dependencies]
