@@ -1,14 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-#[feature(mlx5)]
-mod bindings;
 use std::os::raw::{
     c_char,
     c_int,
 };
-
-pub use bindings::*;
 
 #[link(name = "inlined")]
 extern "C" {
@@ -31,6 +27,8 @@ extern "C" {
 extern "C" {
     fn rte_pmd_mlx5_get_dyn_flag_names();
 }
+
+include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 #[inline(never)]
 pub fn load_mlx_driver() {
