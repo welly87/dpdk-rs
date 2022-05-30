@@ -1,6 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+#![cfg_attr(feature = "strict", deny(clippy:all))]
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(unused)]
+#![allow(unaligned_references)]
+
 use std::os::raw::{
     c_char,
     c_int,
