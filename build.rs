@@ -2,9 +2,11 @@
 // Licensed under the MIT license.
 
 use bindgen::Builder;
-use std::env;
-use std::path::Path;
-use std::process::Command;
+use std::{
+    env,
+    path::Path,
+    process::Command,
+};
 
 fn main() {
     let out_dir_s = env::var("OUT_DIR").unwrap();
@@ -48,20 +50,12 @@ fn main() {
     // Link in `librte_net_mlx5` and its dependencies if desired.
     #[cfg(feature = "mlx5")]
     {
-        lib_names.extend(&[
-            "rte_net_mlx5",
-            "rte_bus_pci",
-            "rte_bus_vdev",
-            "rte_common_mlx5",
-        ]);
+        lib_names.extend(&["rte_net_mlx5", "rte_bus_pci", "rte_bus_vdev", "rte_common_mlx5"]);
     }
 
     // Step 1: Now that we've compiled and installed DPDK, point cargo to the libraries.
     if let Some(location) = library_location {
-       println!(
-	"cargo:rustc-link-search=native={}",
-        location
-       );
+        println!("cargo:rustc-link-search=native={}", location);
     }
 
     for lib_name in &lib_names {
@@ -82,9 +76,7 @@ fn main() {
         .generate()
         .unwrap_or_else(|e| panic!("Failed to generate bindings: {:?}", e));
     let bindings_out = out_dir.join("bindings.rs");
-    bindings
-        .write_to_file(bindings_out)
-        .expect("Failed to write bindings");
+    bindings.write_to_file(bindings_out).expect("Failed to write bindings");
 
     // Step 3: Compile a stub file so Rust can access `inline` functions in the headers
     // that aren't compiled into the libraries.

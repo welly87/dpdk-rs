@@ -3,7 +3,10 @@
 
 #[feature(mlx5)]
 mod bindings;
-use std::os::raw::{c_char, c_int};
+use std::os::raw::{
+    c_char,
+    c_int,
+};
 
 pub use bindings::*;
 
@@ -11,18 +14,8 @@ pub use bindings::*;
 extern "C" {
     fn rte_pktmbuf_free_(packet: *mut rte_mbuf);
     fn rte_pktmbuf_alloc_(mp: *mut rte_mempool) -> *mut rte_mbuf;
-    fn rte_eth_tx_burst_(
-        port_id: u16,
-        queue_id: u16,
-        tx_pkts: *mut *mut rte_mbuf,
-        nb_pkts: u16,
-    ) -> u16;
-    fn rte_eth_rx_burst_(
-        port_id: u16,
-        queue_id: u16,
-        rx_pkts: *mut *mut rte_mbuf,
-        nb_pkts: u16,
-    ) -> u16;
+    fn rte_eth_tx_burst_(port_id: u16, queue_id: u16, tx_pkts: *mut *mut rte_mbuf, nb_pkts: u16) -> u16;
+    fn rte_eth_rx_burst_(port_id: u16, queue_id: u16, rx_pkts: *mut *mut rte_mbuf, nb_pkts: u16) -> u16;
     fn rte_mbuf_refcnt_read_(m: *const rte_mbuf) -> u16;
     fn rte_mbuf_refcnt_update_(m: *mut rte_mbuf, value: i16) -> u16;
     fn rte_pktmbuf_adj_(packet: *mut rte_mbuf, len: u16) -> *mut c_char;
@@ -67,22 +60,12 @@ pub unsafe fn rte_pktmbuf_alloc(mp: *mut rte_mempool) -> *mut rte_mbuf {
 }
 
 #[inline]
-pub unsafe fn rte_eth_tx_burst(
-    port_id: u16,
-    queue_id: u16,
-    tx_pkts: *mut *mut rte_mbuf,
-    nb_pkts: u16,
-) -> u16 {
+pub unsafe fn rte_eth_tx_burst(port_id: u16, queue_id: u16, tx_pkts: *mut *mut rte_mbuf, nb_pkts: u16) -> u16 {
     rte_eth_tx_burst_(port_id, queue_id, tx_pkts, nb_pkts)
 }
 
 #[inline]
-pub unsafe fn rte_eth_rx_burst(
-    port_id: u16,
-    queue_id: u16,
-    rx_pkts: *mut *mut rte_mbuf,
-    nb_pkts: u16,
-) -> u16 {
+pub unsafe fn rte_eth_rx_burst(port_id: u16, queue_id: u16, rx_pkts: *mut *mut rte_mbuf, nb_pkts: u16) -> u16 {
     rte_eth_rx_burst_(port_id, queue_id, rx_pkts, nb_pkts)
 }
 
