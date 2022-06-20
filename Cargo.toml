@@ -5,7 +5,7 @@
 name = "dpdk-rs"
 version = "1.0.4"
 authors = [ "Microsoft Corporation" ]
-edition = "2018"
+edition = "2021"
 description = "Rust Bindings for Libdpdk"
 readme = "README.md"
 homepage = "https://aka.ms/demikernel"
