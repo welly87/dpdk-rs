@@ -2,11 +2,7 @@
 // Licensed under the MIT license.
 
 use bindgen::Builder;
-use std::{
-    env,
-    path::Path,
-    process::Command,
-};
+use std::{env, path::Path, process::Command};
 
 fn main() {
     let out_dir_s = env::var("OUT_DIR").unwrap();
