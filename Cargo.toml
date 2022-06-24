@@ -10,7 +10,7 @@ description = "Rust Bindings for Libdpdk"
 readme = "README.md"
 homepage = "https://aka.ms/demikernel"
 repository = "https://github.com/demikernel/dpdk-rs"
-license-file = "LICENSE"
+license-file = "LICENSE.txt"
 
 [dependencies]
 cfg-if = "1.0.0"
