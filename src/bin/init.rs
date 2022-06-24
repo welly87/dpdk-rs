@@ -8,16 +8,8 @@
 #![allow(unused)]
 #![allow(unaligned_references)]
 
-use dpdk_rs::{
-    rte_eal_init,
-    *,
-};
-use std::{
-    env,
-    ffi::CString,
-    mem::MaybeUninit,
-    time::Duration,
-};
+use dpdk_rs::{rte_eal_init, *};
+use std::{env, ffi::CString, mem::MaybeUninit, time::Duration};
 
 fn main() {
     load_mlx_driver();

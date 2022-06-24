@@ -8,10 +8,7 @@
 #![allow(unused)]
 #![allow(unaligned_references)]
 
-use std::os::raw::{
-    c_char,
-    c_int,
-};
+use std::os::raw::{c_char, c_int};
 
 #[link(name = "inlined")]
 extern "C" {
