@@ -73,6 +73,7 @@ fn main() {
         .clang_arg("-mavx")
         .header("wrapper.h")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .generate_comments(false)
         .generate()
         .unwrap_or_else(|e| panic!("Failed to generate bindings: {:?}", e));
     let bindings_out = out_dir.join("bindings.rs");
