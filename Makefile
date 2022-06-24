@@ -9,37 +9,55 @@ export PREFIX ?= $(HOME)
 export PKG_CONFIG_PATH ?= $(shell find $(PREFIX)/lib/ -name '*pkgconfig*' -type d | xargs | sed -e 's/\s/:/g')
 
 #=======================================================================================================================
-# Build Parameters
-#=======================================================================================================================
-
-DRIVER ?= $(shell [ ! -z "`lspci | grep -E "ConnectX-[4,5]"`" ] && echo mlx5 || echo mlx4)
-CARGO_FEATURES += --features=$(DRIVER)
-
-#=======================================================================================================================
 # Toolchain Configuration
 #=======================================================================================================================
 
-# Rust Toolchain
-export BUILD ?= --release
 export CARGO ?= $(HOME)/.cargo/bin/cargo
+
+# Switches:
+# - TEST    Test to run.
+# - BENCH   Microbenchmark to run.
+# - FLAGS   Flags passed to cargo.
+
+# Set driver version.
+export DRIVER ?= $(shell [ ! -z "`lspci | grep -E "ConnectX-[4,5]"`" ] && echo mlx5 || echo mlx4)
+export FLAGS += --features=$(DRIVER)
+
+# Set build mode.
+ifneq ($(DEBUG),yes)
+export BUILD = release
+else
+export BUILD = dev
+endif
+export FLAGS += --profile $(BUILD)
 
 #=======================================================================================================================
 
-all: all-libs all-tests
+# Builds source code.
+all:
+	$(CARGO) build --all $(FLAGS)
 
-all-libs: check-fmt
-	$(CARGO) build $(BUILD) $(CARGO_FEATURES)
+# Runs regression tests.
+test:
+	$(CARGO) test $(FLAGS) $(TEST) -- --nocapture
 
-all-tests: check-fmt
-	$(CARGO) build --tests $(BUILD) $(CARGO_FEATURES)
+# Runs microbenchmarks.
+bench:
+	$(CARGO) bench $(FLAGS) $(BENCH) -- --nocapture
 
+# Check code style formatting.
 check-fmt: check-fmt-rust
 
+# Check code style formatting for Rust.
 check-fmt-rust:
-	$(CARGO) fmt -- --check
+	$(CARGO) fmt --all -- --check
 
-test:
-	$(CARGO) test --lib $(BUILD) $(CARGO_FEATURES)
+# Builds documentation.
+doc:
+	$(CARGO) doc $(FLAGS) --no-deps
 
+# Cleans up all build artifacts.
 clean:
-	$(CARGO) clean
+	rm -rf target && \
+	$(CARGO) clean && \
+	rm -f Cargo.lock
