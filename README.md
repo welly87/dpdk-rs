@@ -1,5 +1,4 @@
-Rust Bindings for DPDK
-=======================
+# Rust Bindings for DPDK
 
 [![Join us on Slack!](https://img.shields.io/badge/chat-on%20Slack-e01563.svg)](https://join.slack.com/t/demikernel/shared_invite/zt-11i6lgaw5-HFE_IAls7gUX3kp1XSab0g)
 
@@ -10,40 +9,42 @@ following devices are supported:
 - [x] Mellanox ConnectX-4
 - [x] Mellanox ConnextX-5
 
-Building and Running
----------------------
+> This project is a component of Demikernel - a libOS architecture for kernel-bypass devices.
+>
+> To read more about Demikernel check out <https://aka.ms/demikernel>.
 
-**1. Clone This Repository**
-```
+## Building and Running
+
+### 1. Clone This Repository
+
+```bash
 export WORKDIR=$HOME                                  # Change this to whatever you want.
 cd $WORKDIR                                           # Switch to working directory.
 git clone https://github.com/demikernel/dpdk-rs.git   # Clone.
 ```
 
-**2. Setup Build Environment (Optional)**
+### 2. Setup Build Environment (Optional)
 
->  Set this if DPDK is not installed system wide.
+> Set this if DPDK is not installed system wide.
 
-```
+```bash
 export PKG_CONFIG_PATH=/path/to/dpdk/pkgconfig
 ```
 
-**3. Build Rust Bindings for DPDK**
-```
+### 3. Build Rust Bindings for DPDK
+
+```bash
 cd $WORKDIR/dpdk-rs    # Switch to working directory.
 cargo build            # Build Rust bindings for DPDK.
 ```
 
-
-Code of Conduct
----------------
+## Code of Conduct
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/)
 or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-Usage Statement
---------------
+## Usage Statement
 
 This project is a prototype. As such, we provide no guarantees that it will
 work and you are assuming any risks with using the code. We welcome comments
