@@ -1,10 +1,83 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-use bindgen::Builder;
-use std::{env, path::Path, process::Command};
+use ::anyhow::Result;
+use ::bindgen::{Bindings, Builder};
+use ::cc::Build;
+use ::std::{env, path::Path};
 
-fn main() {
+#[cfg(target_os = "windows")]
+fn os_build() -> Result<()> {
+    use ::std::path::PathBuf;
+
+    let out_dir_s: String = env::var("OUT_DIR")?;
+    let out_dir: &Path = Path::new(&out_dir_s);
+
+    let libdpdk_path: String = env::var("LIBDPDK_PATH")?;
+
+    let include_path: String = format!("{}{}", libdpdk_path, "\\include");
+    let library_path: String = format!("{}{}", libdpdk_path, "\\lib");
+
+    let libraries: Vec<&str> = vec![
+        "rte_cfgfile",
+        "rte_hash",
+        "rte_cmdline",
+        "rte_pci",
+        "rte_ethdev",
+        "rte_meter",
+        "rte_net",
+        "rte_mbuf",
+        "rte_mempool",
+        "rte_rcu",
+        "rte_ring",
+        "rte_eal",
+        "rte_telemetry",
+        "rte_kvargs",
+    ];
+
+    let cflags: &str = "-mavx";
+
+    // Step 1: Now that we've compiled and installed DPDK, point cargo to the libraries.
+    println!("cargo:rustc-link-search={}", library_path);
+
+    for lib in &libraries {
+        println!("cargo:rustc-link-lib=dylib={}", lib);
+    }
+
+    // Step 2: Generate bindings for the DPDK headers.
+    let bindings: Bindings = Builder::default()
+        .clang_arg(&format!("-I{}", include_path))
+        .blocklist_type("rte_arp_ipv4")
+        .blocklist_type("rte_arp_hdr")
+        .blocklist_type("IMAGE_TLS_DIRECTORY")
+        .blocklist_type("PIMAGE_TLS_DIRECTORY")
+        .blocklist_type("PIMAGE_TLS_DIRECTORY64")
+        .blocklist_type("IMAGE_TLS_DIRECTORY64")
+        .blocklist_type("_IMAGE_TLS_DIRECTORY64")
+        .clang_arg(cflags)
+        .header("wrapper.h")
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .generate_comments(false)
+        .generate()?;
+    let bindings_out: PathBuf = out_dir.join("bindings.rs");
+    bindings.write_to_file(bindings_out)?;
+
+    // Step 3: Compile a stub file so Rust can access `inline` functions in the headers
+    // that aren't compiled into the libraries.
+    let mut builder: Build = cc::Build::new();
+    builder.opt_level(3);
+    builder.flag("-march=native");
+    builder.file("inlined.c");
+    builder.include(include_path);
+    builder.compile("inlined");
+
+    Ok(())
+}
+
+#[cfg(target_os = "linux")]
+fn os_build() -> Result<()> {
+    use ::std::process::Command;
+
     let out_dir_s = env::var("OUT_DIR").unwrap();
     let out_dir = Path::new(&out_dir_s);
 
@@ -59,11 +132,11 @@ fn main() {
     }
 
     // Step 2: Generate bindings for the DPDK headers.
-    let mut builder = Builder::default();
+    let mut builder: Builder = Builder::default();
     for header_location in &header_locations {
         builder = builder.clang_arg(&format!("-I{}", header_location));
     }
-    let bindings = builder
+    let bindings: Bindings = builder
         .blocklist_type("rte_arp_ipv4")
         .blocklist_type("rte_arp_hdr")
         .clang_arg("-mavx")
@@ -77,7 +150,7 @@ fn main() {
 
     // Step 3: Compile a stub file so Rust can access `inline` functions in the headers
     // that aren't compiled into the libraries.
-    let mut builder = cc::Build::new();
+    let mut builder: Build = cc::Build::new();
     builder.opt_level(3);
     builder.pic(true);
     builder.flag("-march=native");
@@ -86,4 +159,12 @@ fn main() {
         builder.include(header_location);
     }
     builder.compile("inlined");
+    Ok(())
+}
+
+fn main() {
+    match os_build() {
+        Ok(()) => {},
+        Err(e) => panic!("Failed to generate bindings: {:?}", e),
+    }
 }
