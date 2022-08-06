@@ -201,8 +201,9 @@ There are additional operating system-specific enhancements such as TCP settings
 
 check MTU
 
-ifconfig | grep mtu
-ip link show dev ens5
+`ifconfig | grep mtu`
+
+`ip link show dev ens5`
 
 Detailed monitoring and proactive routing control can also mitigate network congestions and challenges. For highly sensitive media with multiple potential network paths, you can configure monitoring probes on Amazon EC2 instances to report on link health. That information can be used centrally to modify routes to alternative network paths that are healthy. 
 
