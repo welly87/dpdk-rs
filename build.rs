@@ -122,6 +122,16 @@ fn os_build() -> Result<()> {
         lib_names.extend(&["rte_net_mlx5", "rte_bus_pci", "rte_bus_vdev", "rte_common_mlx5"]);
     }
 
+    // Link in `librte_net_ena` and its dependencies if desired.
+    // found with `readelf -d librte_net_ena.so` 
+    // https://stackoverflow.com/questions/6242761/determine-direct-shared-object-dependencies-of-a-linux-binary
+    #[cfg(feature = "ena")]
+    {
+        println!("feature ena is activated");
+        lib_names.extend(&["rte_net_ena", "rte_bus_pci", "rte_bus_vdev"]);
+    }
+
+
     // Step 1: Now that we've compiled and installed DPDK, point cargo to the libraries.
     if let Some(location) = library_location {
         println!("cargo:rustc-link-search=native={}", location);

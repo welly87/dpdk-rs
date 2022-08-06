@@ -23,6 +23,7 @@ cc = "1.0.73"
 [features]
 mlx4 = []
 mlx5 = []
+ena = []
 
 # Build profile used for releases.
 [profile.release]

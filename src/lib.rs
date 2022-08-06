@@ -44,6 +44,8 @@ pub fn load_mlx_driver() {
                     rte_pmd_mlx5_get_dyn_flag_names();
                 }
             }
+        } else if #[cfg(feature = "ena")] {
+            // Call mlx4 function.
         } else {
             compile_error!("Please select a Mellanox version.")
         }

@@ -9,7 +9,7 @@
 !ifndef 0 #           \
 !include windows.mk # \
 !else
-include linux.mk
+include linuxaws.mk
 #                     \
 !endif
 
