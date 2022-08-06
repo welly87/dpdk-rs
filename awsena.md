@@ -1,7 +1,13 @@
 
 # good intro to dpdk
 
+## official aws
+
 https://github.com/amzn/amzn-drivers/tree/master/userspace/dpdk
+
+## ena poll mode driver - official dpdk
+
+https://doc.dpdk.org/guides/nics/ena.html#overview
 
 # prepare the kernel and dev tools
 
