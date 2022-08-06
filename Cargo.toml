@@ -21,6 +21,7 @@ bindgen = "0.60.1"
 cc = "1.0.73"
 
 [features]
+default = ["ena"]
 mlx4 = []
 mlx5 = []
 ena = []
