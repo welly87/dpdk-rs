@@ -16,14 +16,19 @@ fn main() {
 
     let mut args = vec![];
     let mut ptrs = vec![];
+    
     for arg in env::args().skip(1) {
         let s = CString::new(arg).unwrap();
         ptrs.push(s.as_ptr() as *mut u8);
         args.push(s);
     }
+
     unsafe {
         rte_eal_init(ptrs.len() as i32, ptrs.as_ptr() as *mut _);
         let nb_ports = rte_eth_dev_count_avail();
+        
+        println!("numbers of ports: {}", nb_ports);
+
         assert!(nb_ports > 0);
 
         let name = CString::new("default_mbuf_pool").unwrap();
@@ -144,5 +149,15 @@ unsafe fn initialize_dpdk_port(port_id: u16, mbuf_pool: *mut rte_mempool) {
             panic!("Link never came up");
         }
         retry_count -= 1;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::main;
+
+    #[test]
+    fn it_works() {
+        main();
     }
 }
