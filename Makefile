@@ -19,6 +19,9 @@ include linuxaws.mk
 all:
 	$(CARGO) build --all $(FLAGS)
 
+# run:
+# 	$(CARGO) run $(FLAGS)
+
 # Runs regression tests.
 test:
 	$(CARGO) test $(FLAGS) $(TEST) -- --nocapture

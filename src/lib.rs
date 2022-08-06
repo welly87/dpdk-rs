@@ -45,7 +45,7 @@ pub fn load_mlx_driver() {
                 }
             }
         } else if #[cfg(feature = "ena")] {
-            // Call mlx4 function.
+            // Call ena function.
         } else {
             compile_error!("Please select a Mellanox version.")
         }
