@@ -83,6 +83,8 @@ unsafe fn initialize_dpdk_port(port_id: u16, mbuf_pool: *mut rte_mempool) {
 
     let mut port_conf: rte_eth_conf = { MaybeUninit::zeroed().assume_init() };
     port_conf.rxmode.max_rx_pkt_len = RTE_ETHER_MAX_LEN;
+
+    // FIXME: need to check this more details from aws docs. https://github.com/amzn/amzn-drivers/tree/master/userspace/dpdk#11-rss-support 
     // port_conf.rxmode.mq_mode = rte_eth_rx_mq_mode_ETH_MQ_RX_RSS;
     // port_conf.rx_adv_conf.rss_conf.rss_hf = ETH_RSS_IP as u64 | dev_info.flow_type_rss_offloads;
     // port_conf.txmode.mq_mode = rte_eth_tx_mq_mode_ETH_MQ_TX_NONE;
