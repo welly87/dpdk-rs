@@ -11,6 +11,8 @@ https://doc.dpdk.org/guides/nics/ena.html#overview
 
 # prepare the kernel and dev tools
 
+This guide is using Amazon Linux 2022, please find from community AMI templates using `al2022` as search keyword
+
 ```sh
 sudo dnf update -y
 sudo dnf install -y kernel
